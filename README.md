@@ -40,6 +40,11 @@ The backend API is documented using Swagger. You can access the Swagger document
 1. Navigate to the `api` folder: `cd api`
 2. Run the tests: `npm test`
 
+## TODOs
+
+- Fix the map display
+- Add more tests
+
 ## License
 
 ---
