@@ -10,22 +10,22 @@ The Package Tracking System is a web application that allows users to track the 
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/your-repo/package-tracking-system.git`
-2. Navigate to the project directory: `cd package-tracking-system`
+1. Clone the repository: `git clone https://github.com/flemking/package-tracker.git`
+2. Navigate to the project directory: `cd package-tracker`
 3. Run the setup script: `bash setup.sh`
 
 The setup script will install all necessary dependencies, set up the environment variables, and provide instructions for starting the backend server and frontend development server.
 
 ## Running the Application
 
-1. Start the backend server: `npm run start:dev` (in the `api` folder)
-2. Start the frontend development server: `ng serve` (in the `client/package-tracker` folder)
+1. Start the backend server: `npm run dev` (in the `api` folder)
+2. Start the frontend development server: `ng serve` (in the `client` folder)
 3. Open your browser and navigate to `http://localhost:4200` to access the application.
 
 ## Project Structure
 
 - `api`: Contains the backend code and configuration files.
-- `client/package-tracker`: Contains the Angular frontend application.
+- `client`: Contains the Angular frontend application.
 - `README.md`: This file, providing an overview and instructions for the project.
 - `setup.sh`: A script to automate the installation and setup process.
 
@@ -40,10 +40,11 @@ The backend API is documented using Swagger. You can access the Swagger document
 1. Navigate to the `api` folder: `cd api`
 2. Run the tests: `npm test`
 
-## Contributing
+## TODOs
 
-If you would like to contribute to this project, please follow the guidelines in the `CONTRIBUTING.md` file.
+- Fix the map display
+- Add more tests
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+---
