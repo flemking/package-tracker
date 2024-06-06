@@ -73,6 +73,7 @@ export class WebDriverComponent implements OnInit {
       this.deliveryDetails._id,
       status
     );
+    this.packageDetails.status = status;
   }
 
   updateLocation(location: any): void {
@@ -82,5 +83,6 @@ export class WebDriverComponent implements OnInit {
       this.deliveryDetails._id,
       location
     );
+    this.packageDetails.location = location;
   }
 }

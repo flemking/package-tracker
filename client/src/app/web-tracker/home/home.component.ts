@@ -13,8 +13,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { Package } from '../../types/package';
 import { DeliveryStatus } from '../../types/delivery';
+import { MapComponent } from '../../core/components/map/map.component';
 
 @Component({
   standalone: true,
@@ -29,12 +29,17 @@ import { DeliveryStatus } from '../../types/delivery';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MapComponent,
   ],
 })
 export class WebTrackerComponent implements OnInit {
   trackerForm: FormGroup;
   packageDetails: any;
   deliveryDetails: any;
+
+  source = { lat: 37.7749, lng: -122.4194 }; // Example source coordinates
+  destination = { lat: 34.0522, lng: -118.2437 }; // Example destination coordinates
+  currentLocation = { lat: 36.7783, lng: -119.4179 }; // Example current location coordinates
 
   constructor(
     private fb: FormBuilder,
@@ -51,7 +56,8 @@ export class WebTrackerComponent implements OnInit {
     this.webSocketService.onLocationChanged().subscribe((data) => {
       console.log('Location Changed:', data);
       // Update location details
-      this.deliveryDetails.location = data.location;
+      // this.deliveryDetails.location = data.location;
+      this.currentLocation = data.location;
     });
   }
 
@@ -82,7 +88,8 @@ export class WebTrackerComponent implements OnInit {
     );
   }
 
-  updateLocation(location: any): void {
+  updateLocation(location: { lat: number; lng: number }): void {
+    this.currentLocation = location;
     this.webSocketService.changeLocation(
       'location_changed',
       this.deliveryDetails._id,

@@ -1,111 +1,94 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Loader } from '@googlemaps/js-api-loader';
-import { ActivatedRoute } from '@angular/router';
-import { DeliveryService } from '../../../apis/delivery.service';
-import { PackageService } from '../../../apis/package.service';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
+import * as L from 'leaflet';
 
 @Component({
+  standalone: true,
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css'],
 })
-export class MapsComponent implements OnInit, AfterViewInit {
-  entityId: any;
-  deliveryDetails: any;
-  packageDetails: any;
+export class MapComponent implements OnInit, OnChanges {
+  @Input() source?: { lat: number; lng: number };
+  @Input() destination?: { lat: number; lng: number };
+  @Input() currentLocation?: { lat: number; lng: number };
 
-  private map: google.maps.Map | undefined;
-  private marker: google.maps.Marker | undefined;
+  private map!: L.Map;
+  private sourceMarker?: L.Marker;
+  private destinationMarker?: L.Marker;
+  private currentLocationMarker?: L.Marker;
 
-  constructor(
-    private route: ActivatedRoute,
-    private _deliveryService: DeliveryService,
-    private _packagesService: PackageService
-  ) {}
+  constructor() {}
 
   ngOnInit(): void {
-    // Récupération l'ID de la livraison depuis les paramètres de l'URL
-    this.route.params.subscribe(async (params) => {
-      this.entityId = params['id'];
-
-      let packageResponse: any;
-
-      try {
-        // Tentative de recherche sur le modèle package
-        packageResponse = await this._packagesService
-          .getPackageById(this.entityId)
-          .toPromise();
-      } catch (error) {
-        console.error(error);
-      }
-
-      if (packageResponse) {
-        this.packageDetails = packageResponse;
-        if (this.packageDetails.active_delivery_id) {
-          const deliveryResponse: any = await this._deliveryService
-            .getDeliveryById(this.packageDetails.active_delivery_id)
-            .toPromise();
-          if (deliveryResponse && deliveryResponse.location) {
-            const lat = deliveryResponse.location.lat;
-            const lng = deliveryResponse.location.lng;
-            this.initializeMap(lat, lng);
-          } else {
-            console.error('Location not found');
-          }
-        } else if (this.packageDetails.from_location) {
-          const lat = this.packageDetails.from_location.lat;
-          const lng = this.packageDetails.from_location.lng;
-          this.initializeMap(lat, lng);
-        } else {
-          console.error('Location not found');
-        }
-      } else {
-        const deliveryResponse: any = await this._deliveryService
-          .getDeliveryById(this.entityId)
-          .toPromise();
-        if (deliveryResponse && deliveryResponse.location) {
-          const lat = deliveryResponse.location.lat;
-          const lng = deliveryResponse.location.lng;
-          this.initializeMap(lat, lng);
-        } else {
-          const lat = deliveryResponse.package_id.from_location.lat;
-          const lng = deliveryResponse.package_id.from_location.lng;
-          this.initializeMap(lat, lng);
-        }
-      }
-    });
+    this.initializeMap();
   }
 
-  ngAfterViewInit() {
-    const loader = new Loader({
-      apiKey: 'AIzaSyABllXWc735BWqURbAcpxsPqaBl4HGPYGg',
-    });
-
-    loader.load().then(() => {
-      console.log('Map loaded');
-    });
-  }
-
-  initializeMap(lat: number, lng: number) {
-    const mapOptions: google.maps.MapOptions = {
-      center: { lat, lng },
-      zoom: 12,
-    };
-
-    const mapElement = document.getElementById('map');
-    if (mapElement) {
-      this.map = new google.maps.Map(mapElement, mapOptions);
-
-      // Marker
-      const markerOptions: google.maps.MarkerOptions = {
-        position: { lat, lng },
-        map: this.map,
-        title: 'Package Position',
-      };
-
-      this.marker = new google.maps.Marker(markerOptions);
-    } else {
-      console.error('Map element not found');
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.map) {
+      if (changes['source'] && changes['source'].currentValue) {
+        this.updateSourceMarker(changes['source'].currentValue);
+      }
+      if (changes['destination'] && changes['destination'].currentValue) {
+        this.updateDestinationMarker(changes['destination'].currentValue);
+      }
+      if (
+        changes['currentLocation'] &&
+        changes['currentLocation'].currentValue
+      ) {
+        this.updateCurrentLocationMarker(
+          changes['currentLocation'].currentValue
+        );
+      }
     }
+  }
+
+  private initializeMap(): void {
+    this.map = L.map('map').setView([0, 0], 2);
+
+    L.tileLayer(
+      'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {
+        maxZoom: 19,
+      }
+      // 'https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png',
+      // {
+      //   minZoom: 0,
+      //   maxZoom: 20,
+      //   attribution:
+      //     '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      // }
+    ).addTo(this.map);
+
+    this.sourceMarker = L.marker([0, 0], { title: 'Source' }).addTo(this.map);
+    this.destinationMarker = L.marker([0, 0], { title: 'Destination' }).addTo(
+      this.map
+    );
+    this.currentLocationMarker = L.marker([0, 0], {
+      title: 'Current Location',
+    }).addTo(this.map);
+  }
+
+  private updateSourceMarker(coords: { lat: number; lng: number }): void {
+    this.sourceMarker && this.sourceMarker.setLatLng([coords.lat, coords.lng]);
+    this.map && this.map.setView([coords.lat, coords.lng], 10);
+  }
+
+  private updateDestinationMarker(coords: { lat: number; lng: number }): void {
+    this.destinationMarker &&
+      this.destinationMarker.setLatLng([coords.lat, coords.lng]);
+  }
+
+  private updateCurrentLocationMarker(coords: {
+    lat: number;
+    lng: number;
+  }): void {
+    this.currentLocationMarker &&
+      this.currentLocationMarker.setLatLng([coords.lat, coords.lng]);
   }
 }
