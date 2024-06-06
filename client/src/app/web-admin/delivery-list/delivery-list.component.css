@@ -1,0 +1,27 @@
+.container {
+  margin: 20px;
+}
+
+.delivery-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.delivery-card {
+  flex: 1 1 calc(33.333% - 20px);
+  box-sizing: border-box;
+}
+
+mat-toolbar {
+  margin-bottom: 20px;
+}
+
+mat-card {
+  background: #e8f5e9;
+}
+
+mat-card-title,
+mat-card-subtitle {
+  color: #388e3c;
+}

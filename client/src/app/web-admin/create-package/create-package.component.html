@@ -1,0 +1,99 @@
+<div class="container">
+    <mat-card>
+        <mat-card-title>Create Package</mat-card-title>
+        <mat-card-content>
+            <form [formGroup]="packageForm" (ngSubmit)="onSubmit()">
+                <div class="location-group">
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Active Delivery ID</mat-label>
+                        <mat-select formControlName="active_delivery_id">
+                            <mat-option value="">None</mat-option>
+                            @for (delivery of deliveries; track delivery._id) {
+                            <mat-option value="{{delivery._id}}">{{delivery.delivery_id}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Description</mat-label>
+                        <textarea matInput formControlName="description"></textarea>
+                    </mat-form-field>
+                </div>
+
+                <div class="location-group">
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Weight</mat-label>
+                        <input type="number" matInput formControlName="weight">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Height</mat-label>
+                        <input type="number" matInput formControlName="height">
+                    </mat-form-field>
+                </div>
+
+                <div class="location-group">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Height</mat-label>
+                        <input type="number" matInput formControlName="height">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Width</mat-label>
+                        <input type="number" matInput formControlName="width">
+                    </mat-form-field>
+                </div>
+
+                <div class="location-group">
+                    <mat-form-field appearance="fill">
+                        <mat-label>From Name</mat-label>
+                        <input type="text" matInput formControlName="from_name">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>From Address</mat-label>
+                        <input type="text" matInput formControlName="from_address">
+                    </mat-form-field>
+                </div>
+
+                <div formGroupName="from_location" class="location-group">
+                    <mat-form-field appearance="fill">
+                        <mat-label>From Latitude</mat-label>
+                        <input type="number" matInput formControlName="lat">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>From Longitude</mat-label>
+                        <input type="number" matInput formControlName="lng">
+                    </mat-form-field>
+                </div>
+
+                <div class="location-group">
+                    <mat-form-field appearance="fill">
+                        <mat-label>To Name</mat-label>
+                        <input type="text" matInput formControlName="to_name">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>To Address</mat-label>
+                        <input type="text" matInput formControlName="to_address">
+                    </mat-form-field>
+                </div>
+
+                <div formGroupName="to_location" class="location-group">
+                    <mat-form-field appearance="fill">
+                        <mat-label>To Latitude</mat-label>
+                        <input type="number" matInput formControlName="lat">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>To Longitude</mat-label>
+                        <input type="number" matInput formControlName="lng">
+                    </mat-form-field>
+                </div>
+
+                <button mat-raised-button color="primary" type="submit" [disabled]="packageForm.invalid">Create
+                    Package</button>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

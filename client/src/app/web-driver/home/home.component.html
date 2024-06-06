@@ -1,0 +1,39 @@
+<div class="container">
+    <mat-card>
+        <mat-card-title>Delivery Tracker</mat-card-title>
+        <mat-card-content>
+            <form [formGroup]="trackerForm" (ngSubmit)="onSubmit()">
+                <mat-form-field appearance="fill">
+                    <mat-label>Enter Delivery ID</mat-label>
+                    <input matInput formControlName="deliveryId">
+                </mat-form-field>
+                <button mat-raised-button color="primary" type="submit" [disabled]="trackerForm.invalid">Submit</button>
+            </form>
+
+            <div *ngIf="packageDetails">
+                <h3>Package Details</h3>
+                <p>Description: {{packageDetails.description}}</p>
+                <p>Weight: {{packageDetails.weight}} grams</p>
+                <p>Dimensions: {{packageDetails.width}}cm x {{packageDetails.height}}cm x {{packageDetails.depth}}cm</p>
+            </div>
+
+            <div *ngIf="deliveryDetails">
+                <h3>Delivery Details</h3>
+                <p>Status: {{deliveryDetails.status}}</p>
+                <p>Pickup Time: {{deliveryDetails.pickup_time | date:'short'}}</p>
+                <p>Start Time: {{deliveryDetails.start_time | date:'short'}}</p>
+                <p>End Time: {{deliveryDetails.end_time | date:'short'}}</p>
+                <div class="status-buttons">
+                    <button mat-raised-button color="primary" (click)="updateStatus(DeliveryStatus.PICKED_UP)"
+                        [disabled]="deliveryDetails.status !== DeliveryStatus.OPEN">Picked Up</button>
+                    <button mat-raised-button color="accent" (click)="updateStatus(DeliveryStatus.IN_TRANSIT)"
+                        [disabled]="deliveryDetails.status !== DeliveryStatus.PICKED_UP">In-Transit</button>
+                    <button mat-raised-button color="success" (click)="updateStatus(DeliveryStatus.DELIVERED)"
+                        [disabled]="deliveryDetails.status !== DeliveryStatus.IN_TRANSIT">Delivered</button>
+                    <button mat-raised-button color="warn" (click)="updateStatus(DeliveryStatus.FAILED)"
+                        [disabled]="deliveryDetails.status !== DeliveryStatus.IN_TRANSIT">Failed</button>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
