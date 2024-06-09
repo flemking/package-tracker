@@ -4,9 +4,11 @@
             style="padding: 20px">
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/web-tracker">Tracker</a></li>
-                <li><a href="/web-driver">Driver</a></li>
+                <li><a href="/" routerLink="/web-admin" [class.active]="activeLink === 'web-admin'">Home</a></li>
+                <li><a href="/web-tracker" routerLink="/web-tracker"
+                        [class.active]="activeLink === 'web-tracker'">Tracker</a></li>
+                <li><a href="/web-driver" routerLink="/web-driver"
+                        [class.active]="activeLink === 'web-driver'">Driver</a></li>
             </ul>
         </nav>
     </div>

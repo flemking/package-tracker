@@ -34,9 +34,17 @@ button {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 20px;
+  margin: 20px 0;
 }
 
 .status-buttons button {
   width: 100%;
+}
+
+h3 {
+  text-decoration: underline;
+}
+
+p span {
+  font-weight: 700;
 }

@@ -42,7 +42,6 @@ The backend API is documented using Swagger. You can access the Swagger document
 
 ## TODOs
 
-- Fix the map display
 - Add more tests
 
 ## License

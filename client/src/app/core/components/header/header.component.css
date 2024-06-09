@@ -34,8 +34,13 @@ header nav ul li a {
   font-size: 16px;
   margin-right: 1rem;
   font-weight: 700;
+  color: #000;
 }
 
-header nav ul li a:hover {
-  text-decoration: underline;
+header nav ul li a:hover,
+header nav ul li a.active {
+  color: #388e3c;
+  background-color: #388e3c10;
+  padding: 5px 10px;
+  border-radius: 10px;
 }
