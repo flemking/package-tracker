@@ -29,3 +29,11 @@ form {
 button {
   margin-top: 10px;
 }
+
+h3 {
+  text-decoration: underline;
+}
+
+p span {
+  font-weight: 700;
+}

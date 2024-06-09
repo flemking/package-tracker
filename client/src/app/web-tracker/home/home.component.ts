@@ -13,8 +13,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { DeliveryStatus } from '../../types/delivery';
+import { Delivery, DeliveryStatus } from '../../types/delivery';
 import { MapComponent } from '../../core/components/map/map.component';
+import { Package } from '../../types/package';
 
 @Component({
   standalone: true,
@@ -34,12 +35,12 @@ import { MapComponent } from '../../core/components/map/map.component';
 })
 export class WebTrackerComponent implements OnInit {
   trackerForm: FormGroup;
-  packageDetails: any;
-  deliveryDetails: any;
+  packageDetails!: Package;
+  deliveryDetails!: Delivery;
 
-  source = { lat: 37.7749, lng: -122.4194 }; // Example source coordinates
-  destination = { lat: 34.0522, lng: -118.2437 }; // Example destination coordinates
-  currentLocation = { lat: 36.7783, lng: -119.4179 }; // Example current location coordinates
+  source = { lat: 6.379448, lng: 2.451324 }; // source coordinates
+  destination = { lat: 6.379448, lng: 2.451324 }; // destination coordinates
+  currentLocation = { lat: 6.379448, lng: 2.451324 }; // current location coordinates
 
   constructor(
     private fb: FormBuilder,
@@ -56,7 +57,6 @@ export class WebTrackerComponent implements OnInit {
     this.webSocketService.onLocationChanged().subscribe((data) => {
       console.log('Location Changed:', data);
       // Update location details
-      // this.deliveryDetails.location = data.location;
       this.currentLocation = data.location;
     });
   }
@@ -75,25 +75,17 @@ export class WebTrackerComponent implements OnInit {
               this.deliveryDetails = delivery;
               this.webSocketService.joinDelivery(this.deliveryDetails._id);
             });
+
+          this.source = this.packageDetails?.from_location;
+          this.destination = this.packageDetails?.to_location;
+          if (
+            this.deliveryDetails?.status === DeliveryStatus.IN_TRANSIT &&
+            this.deliveryDetails?.location
+          ) {
+            this.currentLocation = this.deliveryDetails.location;
+          }
         }
       });
     }
-  }
-
-  updateStatus(status: DeliveryStatus): void {
-    this.webSocketService.changeStatus(
-      'status_changed',
-      this.deliveryDetails._id,
-      status
-    );
-  }
-
-  updateLocation(location: { lat: number; lng: number }): void {
-    this.currentLocation = location;
-    this.webSocketService.changeLocation(
-      'location_changed',
-      this.deliveryDetails._id,
-      location
-    );
   }
 }

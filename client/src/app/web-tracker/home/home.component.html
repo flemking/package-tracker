@@ -12,23 +12,25 @@
 
             <div *ngIf="packageDetails">
                 <h3>Package Details</h3>
-                <p>Description: {{packageDetails.description}}</p>
-                <p>Weight: {{packageDetails.weight}} grams</p>
-                <p>Dimensions: {{packageDetails.width}}cm x {{packageDetails.height}}cm x {{packageDetails.depth}}cm</p>
+                <p><span>Description:</span> {{packageDetails.description}}</p>
+                <p><span>Weight:</span> {{packageDetails.weight}} grams</p>
+                <p><span>Dimensions:</span> {{packageDetails.width}}cm x {{packageDetails.height}}cm x
+                    {{packageDetails.depth}}cm
+                </p>
             </div>
 
             <div *ngIf="deliveryDetails">
                 <h3>Delivery Details</h3>
-                <p>Status: {{deliveryDetails.status}}</p>
-                <p>Pickup Time: {{deliveryDetails.pickup_time | date:'short'}}</p>
-                <p>Start Time: {{deliveryDetails.start_time | date:'short'}}</p>
-                <p>End Time: {{deliveryDetails.end_time | date:'short'}}</p>
-                <p *ngIf="deliveryDetails.location">Current Location: {{deliveryDetails.location.lat}},
+                <p><span>Status:</span> {{deliveryDetails.status}}</p>
+                <p><span>Pickup Time:</span> {{deliveryDetails.pickup_time | date:'short'}}</p>
+                <p><span>Start Time:</span> {{deliveryDetails.start_time | date:'short'}}</p>
+                <p><span>End Time:</span> {{deliveryDetails.end_time | date:'short'}}</p>
+                <p *ngIf="deliveryDetails.location"><span>Current Location:</span> {{deliveryDetails.location.lat}},
                     {{deliveryDetails.location.lng}}</p>
             </div>
 
+            <app-map [source]="source" [destination]="destination" [currentLocation]="currentLocation"></app-map>
 
         </mat-card-content>
     </mat-card>
-    <!-- <app-map [source]="source" [destination]="destination" [currentLocation]="currentLocation"></app-map> -->
 </div>

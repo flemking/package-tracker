@@ -22,9 +22,7 @@ import { DeliveryListComponent } from '../delivery-list/delivery-list.component'
 export class HomeComponent implements OnInit {
   constructor(private router: Router) {}
 
-  ngOnInit(): void {
-    console.log('zep');
-  }
+  ngOnInit(): void {}
 
   navigateTo(path: string) {
     this.router.navigate([`/web-admin/${path}`]);

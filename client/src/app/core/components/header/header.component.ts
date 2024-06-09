@@ -1,19 +1,24 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenu, MatMenuModule } from '@angular/material/menu';
-import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-header',
   standalone: true,
-  imports: [MatMenuModule, MatIconModule, MatToolbarModule],
+  selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css',
+  styleUrls: ['./header.component.css'],
+  imports: [],
 })
-export class HeaderComponent {
-  @Output() sidenavToggle = new EventEmitter<void>();
+export class HeaderComponent implements OnInit {
+  activeLink: string | undefined;
 
-  toggleSidenav() {
-    this.sidenavToggle.emit();
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.activeLink = event.urlAfterRedirects.split('/')[1];
+      });
   }
 }

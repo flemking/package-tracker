@@ -12,17 +12,18 @@
 
             <div *ngIf="packageDetails">
                 <h3>Package Details</h3>
-                <p>Description: {{packageDetails.description}}</p>
-                <p>Weight: {{packageDetails.weight}} grams</p>
-                <p>Dimensions: {{packageDetails.width}}cm x {{packageDetails.height}}cm x {{packageDetails.depth}}cm</p>
+                <p><span>Description:</span> {{packageDetails.description}}</p>
+                <p><span>Weight:</span> {{packageDetails.weight}} grams</p>
+                <p><span>Dimensions:</span> {{packageDetails.width}}cm x {{packageDetails.height}}cm x
+                    {{packageDetails.depth}}cm</p>
             </div>
 
             <div *ngIf="deliveryDetails">
                 <h3>Delivery Details</h3>
-                <p>Status: {{deliveryDetails.status}}</p>
-                <p>Pickup Time: {{deliveryDetails.pickup_time | date:'short'}}</p>
-                <p>Start Time: {{deliveryDetails.start_time | date:'short'}}</p>
-                <p>End Time: {{deliveryDetails.end_time | date:'short'}}</p>
+                <p><span>Status:</span> {{deliveryDetails.status}}</p>
+                <p><span>Pickup Time:</span> {{deliveryDetails.pickup_time | date:'short'}}</p>
+                <p><span>Start Time:</span> {{deliveryDetails.start_time | date:'short'}}</p>
+                <p><span>End Time:</span> {{deliveryDetails.end_time | date:'short'}}</p>
                 <div class="status-buttons">
                     <button mat-raised-button color="primary" (click)="updateStatus(DeliveryStatus.PICKED_UP)"
                         [disabled]="deliveryDetails.status !== DeliveryStatus.OPEN">Picked Up</button>
@@ -34,6 +35,9 @@
                         [disabled]="deliveryDetails.status !== DeliveryStatus.IN_TRANSIT">Failed</button>
                 </div>
             </div>
+
+            <app-map [source]="source" [destination]="destination" [currentLocation]="currentLocation"></app-map>
+
         </mat-card-content>
     </mat-card>
 </div>
