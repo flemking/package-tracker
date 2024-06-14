@@ -8,7 +8,6 @@ import {
 import { DeliveryService } from '../../apis/delivery.service';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Delivery } from '../../types/delivery';
@@ -83,6 +82,10 @@ export class CreatePackageComponent implements OnInit {
         .createPackage(this.packageForm.value)
         .subscribe((data) => {
           console.log(data);
+
+          // go back to home page //TODO: Just find a way to close the modal
+          window.location.reload();
+
           this._snackBar.open('Package successfully created!', 'OK', {
             duration: 3000,
           });

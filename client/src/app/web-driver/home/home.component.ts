@@ -15,7 +15,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { PackageService } from '../../apis/package.service';
 import { MapComponent } from '../../core/components/map/map.component';
-import { Package } from '../../types/package';
 
 @Component({
   standalone: true,
@@ -118,7 +117,7 @@ export class WebDriverComponent implements OnInit, OnChanges {
       this.deliveryDetails._id,
       status
     );
-    this.packageDetails.status = status;
+    this.deliveryDetails.status = status;
   }
 
   updateLocation(location: any): void {

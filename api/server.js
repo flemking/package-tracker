@@ -1,4 +1,3 @@
-// app.js
 const express = require("express");
 const mongoose = require("mongoose");
 const packageRoutes = require("./routes/package.route");
@@ -6,6 +5,7 @@ const deliveryRoutes = require("./routes/delivery.route");
 const morgan = require("morgan");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
+const helmet = require("helmet");
 
 const cors = require("./middlewares/cors");
 
@@ -18,6 +18,7 @@ const app = express();
 app.use(cors);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
 app.use(morgan("dev"));
 
 // Swagger setup

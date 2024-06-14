@@ -7,7 +7,6 @@ import { HeaderComponent } from './core/components/header/header.component';
 import { MatCardActions, MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { MapComponent } from './core/components/map/map.component';
 
 @Component({
   selector: 'app-root',

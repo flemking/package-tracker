@@ -15,9 +15,18 @@ const DeliverySchema = new mongoose.Schema(
       ref: "Package",
       required: true,
     },
-    pickup_time: Number,
-    start_time: Number,
-    end_time: Number,
+    pickup_time: {
+      type: Number,
+      required: false,
+    },
+    start_time: {
+      type: Number,
+      required: false,
+    },
+    end_time: {
+      type: Number,
+      required: false,
+    },
     location: {
       type: LocationSchema,
       required: true,
