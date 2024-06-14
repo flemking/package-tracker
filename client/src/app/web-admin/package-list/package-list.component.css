@@ -2,13 +2,13 @@
   margin: 20px;
 }
 
-.package-list {
+.delivery-list {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
 }
 
-.package-card {
+.delivery-card {
   flex: 1 1 calc(33.333% - 20px);
   box-sizing: border-box;
 }

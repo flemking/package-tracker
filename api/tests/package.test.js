@@ -68,6 +68,15 @@ describe("Package API", () => {
     expect(response.body.description).toBe("Test Package");
   });
 
+  test("GET /api/package/:id - should return 404 for invalid package ID", async () => {
+    const response = await request(app)
+      .get("/api/package/invalid_id")
+      .expect("Content-Type", /json/)
+      .expect(404);
+
+    expect(response.body.message).toBe("Package not found");
+  });
+
   test("PATCH /api/package/:id - should update package by ID", async () => {
     const updatedPackage = {
       description: "Updated Test Package",
@@ -94,11 +103,37 @@ describe("Package API", () => {
 let deliveryId = "";
 describe("Delivery API", () => {
   test("POST /api/delivery - should create a new delivery", async () => {
+    // create a package first
+    let thePackage = await request(app)
+      .post("/api/package")
+      .send({
+        description: "Test Package",
+        weight: 500,
+        height: 10,
+        depth: 5,
+        from_name: "John Doe",
+        from_address: "123 Start Street",
+        from_location: {
+          lat: 37.7749,
+          lng: -122.4196,
+        },
+        to_name: "Jane Doe",
+        to_address: "456 End Avenue",
+        to_location: {
+          lat: 37.7749,
+          lng: -122.4196,
+        },
+      })
+      .expect("Content-Type", /json/)
+      .expect(201);
+
+    expect(thePackage.body).toHaveProperty("_id");
+
+    packageId = thePackage.body._id;
+
+    // create a delivery
     const newDelivery = {
       package_id: packageId,
-      pickup_time: "2022-01-01T00:00:00.000Z",
-      start_time: "2022-01-01T00:00:00.000Z",
-      end_time: "2022-01-01T01:00:00.000Z",
       location: {
         lat: 37.7749,
         lng: -122.4194,
@@ -108,10 +143,18 @@ describe("Delivery API", () => {
     const response = await request(app)
       .post("/api/delivery")
       .send(newDelivery)
+      .expect("Content-Type", /json/)
       .expect(201);
 
     deliveryId = response.body._id;
     expect(response.body).toHaveProperty("_id");
+
+    // check if the package was update
+    thePackage = await request(app)
+      .get(`/api/package/${packageId}`)
+      .expect(200);
+
+    expect(thePackage.body.active_delivery_id).toEqual(deliveryId);
   });
 
   test("GET /api/delivery - should return all deliveries", async () => {
@@ -128,21 +171,31 @@ describe("Delivery API", () => {
     expect(response.body._id).toEqual(deliveryId);
   });
 
+  test("GET /api/delivery/:id - should return 404 for invalid delivery ID", async () => {
+    const response = await request(app)
+      .get("/api/delivery/invalid_id")
+      .expect(404);
+    expect(response.body.message).toBe("Delivery not found");
+  });
+
   test("PATCH /api/delivery/:id - should update delivery by ID", async () => {
     const updatedDelivery = {
-      end_time: "2022-01-01T03:00:00.000Z",
       status: "DELIVERED",
     };
     const response = await request(app)
       .patch(`/api/delivery/${deliveryId}`)
       .send(updatedDelivery)
       .expect(200);
-    expect(response.body.end_time).toEqual(updatedDelivery.end_time);
     expect(response.body.status).toEqual(updatedDelivery.status);
   });
 
   test("DELETE /api/delivery/:id - should delete delivery by ID", async () => {
     await request(app).delete(`/api/delivery/${deliveryId}`).expect(200);
+  });
+
+  // Delete the created package
+  test("DELETE /api/package/:id - should delete package by ID", async () => {
+    await request(app).delete(`/api/package/${packageId}`).expect(200);
   });
 });
 

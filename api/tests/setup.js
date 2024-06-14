@@ -2,28 +2,30 @@ const mongoose = require("mongoose");
 const app = require("../server");
 const supertest = require("supertest");
 
-exports.createTestClient = async (server) => {
-  if (!server) {
-    throw new Error("Server instance is required");
+/**
+ * Create a test client for Supertest
+ * @param {object} server - The server instance to test
+ * @return {Promise<supertest.SuperTest<supertest.TestOptions>>} A promise that resolves to a Supertest client
+ * @throws {Error} If no server instance is provided
+ */
+exports.createTestClient = async (serverInstance) => {
+  if (!serverInstance) {
+    throw new Error("A server instance is required");
   }
-  return supertest(`http://localhost:${server.address().port}`);
+  const { port } = serverInstance.address();
+  return supertest(`http://localhost:${port}`);
 };
 
 exports.startServer = async () => {
-  await mongoose.connect(process.env.MONGODB_URI, {
+  const connectionUri = process.env.MONGODB_URI;
+  await mongoose.connect(connectionUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
 
-  let server;
-  try {
-    server = await app.listen(0, () => {
-      console.log(`Server running on port ${server.address().port}`);
-    });
-  } catch (err) {
-    console.error("Failed to start server:", err);
-  }
-
+  const server = await app.listen(0);
+  const serverUrl = `http://localhost:${server.address().port}`;
   const testClient = await exports.createTestClient(server);
-  return { server, testClient };
+
+  return { server, serverUrl, testClient };
 };

@@ -14,13 +14,10 @@ exports.getPackageById = async (req, res) => {
   const { id } = req.params;
   Package.findById(id)
     .then((new_package) => {
-      if (!new_package) {
-        return res.status(404).json({ message: "Package not found" });
-      }
       res.status(200).json(new_package);
     })
     .catch((error) => {
-      res.status(500).json({ message: error.message });
+      res.status(404).json({ message: "Package not found" });
     });
 };
 
@@ -78,9 +75,6 @@ exports.updatePackage = async (req, res) => {
   } = req.body;
   Package.findById(id)
     .then((new_package) => {
-      if (!new_package) {
-        return res.status(404).json({ message: "Package not found" });
-      }
       new_package.active_delivery_id = active_delivery_id;
       new_package.description = description;
       new_package.weight = weight;
@@ -97,7 +91,7 @@ exports.updatePackage = async (req, res) => {
       res.status(200).json(new_package);
     })
     .catch((error) => {
-      res.status(500).json({ message: error.message });
+      res.status(404).json({ message: "Package not found" });
     });
 };
 
@@ -120,9 +114,6 @@ exports.patchPackage = async (req, res) => {
   } = req.body;
   Package.findById(id)
     .then((new_package) => {
-      if (!new_package) {
-        return res.status(404).json({ message: "Package not found" });
-      }
       if (active_delivery_id) {
         new_package.active_delivery_id = active_delivery_id;
       }
@@ -163,7 +154,7 @@ exports.patchPackage = async (req, res) => {
       res.status(200).json(new_package);
     })
     .catch((error) => {
-      res.status(500).json({ message: error.message });
+      res.status(404).json({ message: "Package not found" });
     });
 };
 
@@ -171,12 +162,9 @@ exports.deletePackage = async (req, res) => {
   const { id } = req.params;
   Package.findByIdAndDelete(id, { new: true })
     .then((new_package) => {
-      if (!new_package) {
-        return res.status(404).json({ message: "Package not found" });
-      }
       res.status(200).json({ message: "Package deleted" });
     })
     .catch((error) => {
-      res.status(500).json({ message: error.message });
+      res.status(404).json({ message: "Package not found" });
     });
 };

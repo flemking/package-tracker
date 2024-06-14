@@ -13,7 +13,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { DeliveryStatus } from '../../types/delivery';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { formatDate } from '../../core/utils';
 import { DeliveryService } from '../../apis/delivery.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -74,6 +73,10 @@ export class CreateDeliveryComponent implements OnInit {
       // Create delivery
       this.deliveryService.createDelivery(newData).subscribe((delivery) => {
         console.log(delivery);
+
+        // go back to home page //TODO: Just find a way to close the modal
+        window.location.reload();
+
         this._snackBar.open('Delivery created successfully', 'Close', {
           duration: 3000,
         });

@@ -4,7 +4,11 @@
   align-items: center;
   padding: 20px;
   background-color: #e0f7fa;
-  border-radius: 10px;
+  background-image: url("https://gozem.co/wp-content/uploads/2020/02/media-image-5.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  min-height: 100vh;
 }
 
 mat-card-title {
