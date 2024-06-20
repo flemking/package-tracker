@@ -24,6 +24,8 @@
                 <p><span>Pickup Time:</span> {{deliveryDetails.pickup_time | date:'short'}}</p>
                 <p><span>Start Time:</span> {{deliveryDetails.start_time | date:'short'}}</p>
                 <p><span>End Time:</span> {{deliveryDetails.end_time | date:'short'}}</p>
+                <button mat-raised-button color="primary" (click)="updateStatus(DeliveryStatus.OPEN)">Reset
+                    To OPEN</button>
                 <div class="status-buttons">
                     <button mat-raised-button color="primary" (click)="updateStatus(DeliveryStatus.PICKED_UP)"
                         [disabled]="deliveryDetails.status !== DeliveryStatus.OPEN">Picked Up</button>
@@ -35,6 +37,7 @@
                         [disabled]="deliveryDetails.status !== DeliveryStatus.IN_TRANSIT">Failed</button>
                 </div>
             </div>
+
 
             <app-map [source]="source" [destination]="destination" [currentLocation]="currentLocation"></app-map>
 
