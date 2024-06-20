@@ -67,6 +67,19 @@ export class WebDriverComponent implements OnInit, OnChanges {
         console.error(error);
       }
     );
+
+    this.webSocketService.onDeliveryUpdated().subscribe((data) => {
+      if (data) {
+        console.log(data);
+        this.deliveryDetails = {
+          ...this.deliveryDetails,
+          start_time: data.delivery_object.start_time,
+          end_time: data.delivery_object.end_time,
+          pickup_time: data.delivery_object.pickup_time,
+          status: data.delivery_object.status,
+        };
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -118,6 +131,23 @@ export class WebDriverComponent implements OnInit, OnChanges {
       status
     );
     this.deliveryDetails.status = status;
+    switch (status) {
+      case DeliveryStatus.PICKED_UP:
+        this.deliveryDetails.pickup_time = Date.now();
+        break;
+      case DeliveryStatus.IN_TRANSIT:
+        this.deliveryDetails.start_time = Date.now();
+        break;
+      case DeliveryStatus.DELIVERED:
+      case DeliveryStatus.FAILED:
+        this.deliveryDetails.end_time = Date.now();
+        break;
+    }
+
+    this.webSocketService.updateDelivery(
+      'delivery_updated',
+      this.deliveryDetails
+    );
   }
 
   updateLocation(location: any): void {
@@ -138,7 +168,6 @@ export class WebDriverComponent implements OnInit, OnChanges {
             lng: position.coords.longitude,
             lat: position.coords.latitude,
           };
-          console.log('Latitude:', this.position);
         },
         (error) => {
           console.error('Error getting location:', error);
